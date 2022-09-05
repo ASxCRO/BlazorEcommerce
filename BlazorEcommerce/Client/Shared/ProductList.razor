@@ -1,7 +1,13 @@
-﻿@inject HttpClient httpClient
+﻿@inject IProductService productService
 
-<ul class="list-unstyled">
-    @foreach (var product in Products)
+@if(productService.Products == null || productService.Products.Count == 0)
+{
+    <span>Loading Products</span>
+}
+else
+{
+   <ul class="list-unstyled">
+    @foreach (var product in productService.Products)
    {
        <li class="media my-3">
            <div class="media-img-wrapper mr-2">
@@ -20,18 +26,14 @@
            </div>
        </li>
    }
-</ul>
+</ul> 
+}
+
 
 
 @code {
-    private static List<Product> Products = new();
-
     protected override async Task OnInitializedAsync()
     {
-        var response = await httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>("/api/product");
-        if (response != null && response.Data != null)
-        {
-            Products = response.Data;
-        }
+        await productService.GetProducts();
     }
 }
