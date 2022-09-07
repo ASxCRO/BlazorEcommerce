@@ -58,5 +58,35 @@ namespace BlazorEcommerce.Server.Services.ProductService
             return response;
 
         }
+
+        public async Task<ServiceResponse<List<string>>> GetProductSearchSuggestions(string searchText)
+        {
+            var result = await _context.Products
+                .Where(p => p.Title.ToLower().Contains(searchText))
+                .Select(p=>p.Title)
+                .ToListAsync();
+
+
+            var response = new ServiceResponse<List<string>>
+            {
+                Data = result
+            };
+
+            return response;
+        }
+
+        public async Task<ServiceResponse<List<Product>>> SearchProduct(string searchText)
+        {
+            var response = new ServiceResponse<List<Product>>
+            {
+                Data = await _context.Products
+                .Where(p=>p.Title.ToLower().Contains(searchText) 
+                || p.Description.ToLower().Contains(searchText))
+                .Include(p=>p.Variants)
+                .ToListAsync()
+            };
+
+            return response;
+        }
     }
 }
