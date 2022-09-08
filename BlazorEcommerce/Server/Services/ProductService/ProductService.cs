@@ -1,4 +1,6 @@
 ﻿
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
 namespace BlazorEcommerce.Server.Services.ProductService
 {
     public class ProductService : IProductService
@@ -84,19 +86,34 @@ namespace BlazorEcommerce.Server.Services.ProductService
             {
                 Data = result
             };
-
             return response;
         }
 
-        public async Task<ServiceResponse<List<Product>>> SearchProduct(string searchText)
+        public async Task<ServiceResponse<ProductSearchResult>> SearchProduct(string searchText, int page)
         {
-            var response = new ServiceResponse<List<Product>>
-            {
-                Data = await _context.Products
-                .Where(p=>p.Title.ToLower().Contains(searchText) 
+            var pageResult = 2f;
+            var pageCount = Math.Ceiling((await _context.Products
+                .Where(p => p.Title.ToLower().Contains(searchText)
                 || p.Description.ToLower().Contains(searchText))
-                .Include(p=>p.Variants)
-                .ToListAsync()
+                .CountAsync()) / pageResult);
+            var products = await _context.Products
+                .Where(p => p.Title.ToLower().Contains(searchText)
+                || p.Description.ToLower().Contains(searchText))
+                .Include(p => p.Variants)
+                .Skip((page - 1) * (int)pageResult)
+                .Take((int)pageResult)
+                .ToListAsync();
+
+            var searchResult = new ProductSearchResult
+            {
+                Products = products,
+                CurrentPage = page,
+                Pages = (int)pageCount
+            };
+
+            var response = new ServiceResponse<ProductSearchResult>
+            {
+                Data = searchResult
             };
 
             return response;
