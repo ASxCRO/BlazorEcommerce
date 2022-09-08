@@ -69,9 +69,6 @@ else
         {
             message = result.Message;
         }
-
-
-
     }
 
     private ProductVariant GetSelectedVariant()
@@ -79,6 +76,4 @@ else
         var variant = product.Variants.FirstOrDefault(v => v.ProductTypeId == currentTypeId);
         return variant;
     }
-
-
 }

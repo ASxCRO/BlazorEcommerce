@@ -14,7 +14,6 @@
         public int CurrentPage { get; set; } = 1;
         public int PageCount { get; set; } = 0;
         public string LastSearchText { get; set; }
-
         public event Action ProductsChanged;
 
         public async Task<ServiceResponse<Product>> GetProductAsync(int productId)

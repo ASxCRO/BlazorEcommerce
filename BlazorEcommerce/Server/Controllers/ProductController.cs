@@ -17,8 +17,6 @@ namespace BlazorEcommerce.Server.Controllers
         public async Task<ActionResult<ServiceResponse<List<Product>>>> GetProducts()
         {
             var products = await _productService.GetProductListAsync();
-            
-
             return Ok(products);
         }
 
@@ -56,10 +54,5 @@ namespace BlazorEcommerce.Server.Controllers
             var result = await _productService.GetFeaturedProducts();
             return Ok(result);
         }
-
-
-
-
-
     }
 }

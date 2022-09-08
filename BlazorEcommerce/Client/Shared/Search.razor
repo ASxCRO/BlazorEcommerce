@@ -44,7 +44,6 @@
         navigationManager.NavigateTo($"search/{searchText}/1");
     }
 
-
     public async Task HandleSearch(KeyboardEventArgs args)
     {
         if(args.Key == null || args.Key.Equals("Enter"))
@@ -55,6 +54,5 @@
         {
             suggestions = await productService.GetProductSearchSuggestions(searchText);
         }
-
     }
 }
