@@ -10,5 +10,6 @@ namespace BlazorEcommerce.Shared
     {
         public int ProductTypeId { get; set; }
         public int ProductId { get; set; }
+        public int Quantity { get; set; }
     }
 }
